@@ -1,0 +1,10 @@
+/node_modules
+.env
+
+infos
+
+/lib
+
+notes.txt
+
+example.js
