@@ -1,16 +1,23 @@
 # metadata-github-to-mongo
-This is part of my graduation project. The goal of github-to-mongo is to transfer metadata of a repository retrieved from the GitHub-API into a mongoDB. The data will be saved in a condensed format, using only the object-fields needed for my graduation project.
+This is part of my graduation project. The goal of metadata-github-to-mongo is to transfer metadata of a repository retrieved from the GitHub-API (using Probot) into a mongoDB. The data will be saved in a condensed format, using only the object-fields needed for my graduation project.
 
 ## Information
 
 #### Layout :
-A ts-node server starts, retrieving necessary data from the GitHub-API using axios. The data will be put into a local mongoDB-server-installation. Authenticaion and configuration a saved in a .env-file.
+A probot app starts, receiving webhooks for GitHub events and condensing the payload using an Event-interface. The data will be put into a local mongoDB-server-installation. Authenticaion and configuration a saved in a .env-file.
 #### npm-packages used :
-- npm typescript
-- npm mongodb
-- npm dotenv
-- npm ts-node
-- npm axios
+- typescript
+- mongodb
+- dotenv
+- probot
+- babel-jest
+- jest
+- ts-jest
+- smee-client
+- @types/node
+- @types/jest
+- @babel/preset-typescript
+
 #### External References :
 
 - [GitHub API Reference](https://docs.github.com/en/rest/reference)

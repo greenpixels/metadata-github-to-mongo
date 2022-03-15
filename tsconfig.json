@@ -70,6 +70,7 @@
       "skipLibCheck": true
     },
     "include": ["src/"],
+    "exclude": ["*.example.js", "src/tests/*.test.ts", "src/tests/**.test.js"],
     "compileOnSave": false
   }
   

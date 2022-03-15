@@ -1,18 +1,17 @@
-interface User {
-  name: string,
-  id : number
+interface Sender {
+  readonly name: string,
+  readonly id: number,
+  readonly type: string
 }
 
 interface Branch {
-  name: string,
-  id : number
+  readonly name : string
 }
 
-export default class Event {
-  constructor(
-    readonly name: string,
-    readonly action: string,
-    readonly user: User,
-    readonly branch: Branch
-  ){}
+export default interface Event {
+  readonly name: string,
+  readonly action: string,
+  readonly sender: Sender,
+  readonly branch?: Branch,
+  timestamp: Date
 }
