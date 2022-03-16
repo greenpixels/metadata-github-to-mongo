@@ -13,5 +13,5 @@ export default interface Event {
   readonly action: string,
   readonly sender: Sender,
   readonly branch?: Branch,
-  timestamp: Date
+  readonly timestamp: Date
 }

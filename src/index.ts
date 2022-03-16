@@ -8,12 +8,23 @@ const mongoservice = new MongoService();
 
 module.exports = async (app: Probot, _router: any, collection_name: string = "events") => { // Probot overwrites the second parameter with a router-object, so we can only use the third parameter
   await mongoservice.connect();
-  app.on("push", async (context : any) => {
+  app.on("push", async (context: any) => {
+    switch (probotservice.disassemblePushContext(context)) {
+      case "create":
+        let evCreate = probotservice.convertPushContextToBranchEventObject(context, "create");
+        await mongoservice.addOne<Event>(collection_name, evCreate);
+        break;
+      case "delete":
+        let evDelete = probotservice.convertPushContextToBranchEventObject(context, "delete");
+        await mongoservice.addOne<Event>(collection_name, evDelete);
+        break;
+    }
+    
     let ev = probotservice.convertPushContextToEventObject(context);
     await mongoservice.addOne<Event>(collection_name, ev);
   });
 
-  app.on("create", async (context: any) => {
+  /*app.on("create", async (context: any) => {
     if (context.payload.ref_type != "branch") return;
     let ev = probotservice.convertBranchContextToEventObject(context);
     await mongoservice.addOne<Event>(collection_name, ev);
@@ -23,7 +34,7 @@ module.exports = async (app: Probot, _router: any, collection_name: string = "ev
     if (context.payload.ref_type != "branch") return;
     let ev = probotservice.convertBranchContextToEventObject(context);
     await mongoservice.addOne<Event>(collection_name, ev);
-  });
+  });*/
 
   app.on("pull_request", async (context : any) => {
     let ev = probotservice.convertPullRequestContextToEventObject(context);
@@ -45,4 +56,3 @@ module.exports = async (app: Probot, _router: any, collection_name: string = "ev
     await mongoservice.addOne<Event>(collection_name, ev);
   });
 };
-
