@@ -1,8 +1,16 @@
 import { WebhookEvent } from "@octokit/webhooks";
 import Event from "../dto/event.dto"
 
+function checkForUndefined(values: Array<any>) {
+  values.forEach((value) => {
+    if (value === undefined) {
+      throw new Error(`Undefined value detected in context`);
+    }
+  })
+}
 export default class ProbotService {
   public convertPushContextToEventObject(context: WebhookEvent<any>): Event {
+    checkForUndefined([context.name, context.payload.sender.login, context.payload.sender.type, context.payload.sender.id, context.payload.ref]);
     return {
       name: context.name,
       action: "send", //Pull requests by standard don't have an action attribute, so we mock one
@@ -19,7 +27,8 @@ export default class ProbotService {
   }
 
   public convertBranchContextToEventObject(context: WebhookEvent<any>): Event {
-    return {
+    checkForUndefined([context.name, context.payload.sender.login, context.payload.sender.type, context.payload.sender.id, context.payload.ref]);
+    return  {
       name: "branch", // Context only names this WebhookEvent "create, delete ...", so we need to set it to "branch"
       action: context.name, // In this case, the context-payload-name is actually the action "create, delete ..."
       sender: {
@@ -35,7 +44,8 @@ export default class ProbotService {
   }
 
   public convertPullRequestContextToEventObject(context: WebhookEvent<any>): Event {
-    return {
+    checkForUndefined([context.name, context.payload.sender.login, context.payload.sender.type, context.payload.sender.id, context.payload.pull_request.head.ref ]);
+    return  {
       name: context.name,
       action: context.payload.action,
       sender: {
@@ -51,7 +61,8 @@ export default class ProbotService {
   }
 
   public convertIssueContextToEventObject(context: WebhookEvent<any>): Event {
-    return {
+    checkForUndefined([context.name, context.payload.sender.login, context.payload.sender.type, context.payload.sender.id]);
+    return  {
       name: context.name,
       action: context.payload.action,
       sender: {

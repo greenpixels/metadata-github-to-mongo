@@ -18,13 +18,14 @@
   "scripts": {
     "build": "tsc",
     "start": "tsc && probot run ./lib/index.js",
-    "test": "jest"
+    "test": "tsc && jest"
   },
   "author": "Sven Peschau",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.0.0",
     "mongodb": "^4.4.1",
+    "nock": "^13.2.4",
     "probot": "^11.0.1"
   },
   "devDependencies": {

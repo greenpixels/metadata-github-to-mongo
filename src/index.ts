@@ -6,52 +6,43 @@ import ProbotService from "./service/probot.service";
 const probotservice = new ProbotService();
 const mongoservice = new MongoService();
 
-const collection_name = "events";
-
-export = async (app: Probot) => {
+module.exports = async (app: Probot, _router: any, collection_name: string = "events") => { // Probot overwrites the second parameter with a router-object, so we can only use the third parameter
   await mongoservice.connect();
-  
-  app.on("push", async (context) => {
+  app.on("push", async (context : any) => {
     let ev = probotservice.convertPushContextToEventObject(context);
-    mongoservice.addOne<Event>(collection_name, ev);
+    await mongoservice.addOne<Event>(collection_name, ev);
   });
 
-  app.on("create", async (context) => {
+  app.on("create", async (context: any) => {
     if (context.payload.ref_type != "branch") return;
     let ev = probotservice.convertBranchContextToEventObject(context);
-    mongoservice.addOne<Event>(collection_name, ev);
+    await mongoservice.addOne<Event>(collection_name, ev);
   });
 
-  app.on("delete", async (context) => {
+  app.on("delete", async (context : any) => {
     if (context.payload.ref_type != "branch") return;
     let ev = probotservice.convertBranchContextToEventObject(context);
-    mongoservice.addOne<Event>(collection_name, ev);
+    await mongoservice.addOne<Event>(collection_name, ev);
   });
 
-  app.on("pull_request", async (context) => {
+  app.on("pull_request", async (context : any) => {
     let ev = probotservice.convertPullRequestContextToEventObject(context);
-    mongoservice.addOne<Event>(collection_name, ev);
+    await mongoservice.addOne<Event>(collection_name, ev);
   });
 
-  app.on("pull_request_review", async (context) => {
+  app.on("pull_request_review", async (context : any) => {
     let ev = probotservice.convertPullRequestContextToEventObject(context);
-    mongoservice.addOne<Event>(collection_name, ev);
+    await mongoservice.addOne<Event>(collection_name, ev);
   });
 
-  app.on("issues", async (context) => {
+  app.on("issues", async (context: any) => {
     let ev = probotservice.convertIssueContextToEventObject(context);
-    mongoservice.addOne<Event>(collection_name, ev);
+    await mongoservice.addOne<Event>(collection_name, ev);
   });
 
-  app.on("issue_comment", async (context) => {
+  app.on("issue_comment", async (context: any) => {
     let ev = probotservice.convertIssueContextToEventObject(context);
-    mongoservice.addOne<Event>(collection_name, ev);
+    await mongoservice.addOne<Event>(collection_name, ev);
   });
-
-
-  app.onAny(async (context) => {
-    console.log(context.name);
-    //console.log(context.payload);
-  })
 };
 
