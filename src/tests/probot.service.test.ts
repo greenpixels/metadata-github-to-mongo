@@ -1,4 +1,3 @@
-const nock = require("nock");
 // Requiring our app implementation
 const myProbotApp = require("../index");
 const { Probot, ProbotOctokit } = require("probot");
@@ -12,7 +11,6 @@ describe("Probot-Testing", () => {
   let probot : typeof Probot;
 
   beforeEach(async () => {
-    nock.disableNetConnect();
     probot = new Probot({
       githubToken: "test",
       // Disable throttling & retrying requests for easier testing
@@ -38,10 +36,5 @@ describe("Probot-Testing", () => {
 
   test("Throw on receiving a faulty push payload", async () => {
     expect(probot.receive({ name: "push", payload: faultyPushPayload })).rejects.toThrow();
-  });
-
-  afterEach(() => {
-    nock.cleanAll();
-    nock.enableNetConnect();
   });
 });
