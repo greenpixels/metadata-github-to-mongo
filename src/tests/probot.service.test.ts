@@ -26,10 +26,6 @@ describe("Probot-Testing", () => {
     expect(probot.receive({ name: "issues", payload: issuesOpenedPayload })).resolves.not.toThrow();
   });
 
-  /*test("Succesfully receive a webhook for a created branch", async () => {
-    expect(probot.receive({ name: "create", payload: branchCreatedPayload })).resolves.not.toThrow();
-  });*/
-
   test("Succesfully receive a webhook for a push", async () => {
     expect(probot.receive({ name: "push", payload: pushPayload })).resolves.not.toThrow();
   });

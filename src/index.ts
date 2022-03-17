@@ -24,18 +24,6 @@ module.exports = async (app: Probot, _router: any, collection_name: string = "ev
     await mongoservice.addOne<Event>(collection_name, ev);
   });
 
-  /*app.on("create", async (context: any) => {
-    if (context.payload.ref_type != "branch") return;
-    let ev = probotservice.convertBranchContextToEventObject(context);
-    await mongoservice.addOne<Event>(collection_name, ev);
-  });
-
-  app.on("delete", async (context : any) => {
-    if (context.payload.ref_type != "branch") return;
-    let ev = probotservice.convertBranchContextToEventObject(context);
-    await mongoservice.addOne<Event>(collection_name, ev);
-  });*/
-
   app.on("pull_request", async (context : any) => {
     let ev = probotservice.convertPullRequestContextToEventObject(context);
     await mongoservice.addOne<Event>(collection_name, ev);

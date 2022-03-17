@@ -57,23 +57,6 @@ export default class ProbotService {
     }
   }
 
-  /*public convertBranchContextToEventObject(context: WebhookEvent<any>): Event {
-    this.checkForUndefined([context.name, context.payload.sender.login, context.payload.sender.type, context.payload.sender.id, context.payload.ref]);
-    return  {
-      name: "branch", // Context only names this WebhookEvent "create, delete ...", so we need to set it to "branch"
-      action: context.name, // In this case, the context-payload-name is actually the action "create, delete ..."
-      sender: {
-        name: context.payload.sender.login,
-        type: context.payload.sender.type,
-        id: context.payload.sender.id
-      },
-      branch: {
-        name: context.payload.ref
-      },
-      timestamp: new Date()
-    }
-  }*/
-
   public convertPullRequestContextToEventObject(context: WebhookEvent<any>): Event {
     this.checkForUndefined([context.name, context.payload.sender.login, context.payload.sender.type, context.payload.sender.id, context.payload.pull_request.head.ref ]);
     return  {
