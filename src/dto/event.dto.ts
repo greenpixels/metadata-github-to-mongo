@@ -5,7 +5,8 @@ interface Sender {
 }
 
 interface Branch {
-  readonly name : string
+  readonly from: string,
+  readonly to: string
 }
 
 export default interface Event {

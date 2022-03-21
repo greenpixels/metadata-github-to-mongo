@@ -4,14 +4,15 @@ import Event from "../dto/event.dto"
 
 export default class ProbotService {
 
-  disassemblePushContext(context: WebhookEvent) : string {
+
+  disassemblePushContext(context: WebhookEvent): string {
     // Push is also a 'branch create'
-    if (!context.payload.before.split("").some((char : string) => char !== "0")) {
+    if (!context.payload.before.split("").some((char: string) => char !== "0")) {
       return "create";
-    // Push is also a 'branch delete'
+      // Push is also a 'branch delete'
     } else if (!context.payload.after.split("").some((char: string) => char !== "0")) {
       return "delete";
-    // default push
+      // default push
     } else {
       return "default";
     }
@@ -35,14 +36,15 @@ export default class ProbotService {
         id: context.payload.sender.id
       },
       branch: {
-        name: context.payload.ref.split('/').pop() // Will look like this 'refs/heads/newBranch', so we need to split it apart (Problem when branch name includes "/") (TODO: refs/heads)
+        from: context.payload.ref.split('/').pop(), // Will look like this 'refs/heads/newBranch', so we need to split it apart (Problem when branch name includes "/") (TODO: refs/heads)
+        to: context.payload.ref.split('/').pop()
       },
       timestamp: new Date()
     }
   }
 
-  convertPushContextToBranchEventObject(context: WebhookEvent<any>, action : string) {
-    return  {
+  convertPushContextToBranchEventObject(context: WebhookEvent<any>, action: string) {
+    return {
       name: "branch",
       action: action,
       sender: {
@@ -51,15 +53,16 @@ export default class ProbotService {
         id: context.payload.sender.id
       },
       branch: {
-        name: context.payload.ref.split('/').pop()
+        from: context.payload.ref.split('/').pop(),
+        to: context.payload.ref.split('/').pop()
       },
       timestamp: new Date()
     }
   }
 
   public convertPullRequestContextToEventObject(context: WebhookEvent<any>): Event {
-    this.checkForUndefined([context.name, context.payload.sender.login, context.payload.sender.type, context.payload.sender.id, context.payload.pull_request.head.ref ]);
-    return  {
+    this.checkForUndefined([context.name, context.payload.sender.login, context.payload.sender.type, context.payload.sender.id, context.payload.pull_request.head.ref]);
+    return {
       name: context.name,
       action: context.payload.action,
       sender: {
@@ -68,7 +71,26 @@ export default class ProbotService {
         id: context.payload.sender.id
       },
       branch: {
-        name: context.payload.pull_request.head.ref
+        from: context.payload.pull_request.head.ref,
+        to: context.payload.pull_request.base.ref,
+      },
+      timestamp: new Date()
+    }
+  }
+
+  convertPullRequestContextToMergeEventObject(context: WebhookEvent<any>): Event {
+    this.checkForUndefined([context.name, context.payload.sender.login, context.payload.sender.type, context.payload.sender.id, context.payload.pull_request.head.ref]);
+    return {
+      name: context.name,
+      action: "merged", // <- Is a booleab in the context payload, so we need to set the constant ourselves
+      sender: {
+        name: context.payload.sender.login,
+        type: context.payload.sender.type,
+        id: context.payload.sender.id
+      },
+      branch: {
+        from: context.payload.pull_request.head.ref,
+        to: context.payload.pull_request.base.ref,
       },
       timestamp: new Date()
     }
@@ -76,7 +98,7 @@ export default class ProbotService {
 
   public convertIssueContextToEventObject(context: WebhookEvent<any>): Event {
     this.checkForUndefined([context.name, context.payload.sender.login, context.payload.sender.type, context.payload.sender.id]);
-    return  {
+    return {
       name: context.name,
       action: context.payload.action,
       sender: {
