@@ -30,15 +30,13 @@ export default class ProbotService {
     return {
       name: context.name,
       action: "send", //Pull requests by standard don't have an action attribute, so we mock one
-      sender: {
-        name: context.payload.sender.login,
-        type: context.payload.sender.type,
-        id: context.payload.sender.id
-      },
-      branch: {
-        from: context.payload.ref.split('/').pop(), // Will look like this 'refs/heads/newBranch', so we need to split it apart (Problem when branch name includes "/") (TODO: refs/heads)
-        to: context.payload.ref.split('/').pop()
-      },
+      sender_name: context.payload.sender.login,
+      sender_type: context.payload.sender.type,
+      sender_id: context.payload.sender.id,
+
+      branch_from: context.payload.ref.split('/').pop(), // Will look like this 'refs/heads/newBranch', so we need to split it apart (Problem when branch name includes "/") (TODO: refs/heads)
+      branch_to: context.payload.ref.split('/').pop(),
+
       timestamp: new Date()
     }
   }
@@ -47,15 +45,11 @@ export default class ProbotService {
     return {
       name: "branch",
       action: action,
-      sender: {
-        name: context.payload.sender.login,
-        type: context.payload.sender.type,
-        id: context.payload.sender.id
-      },
-      branch: {
-        from: context.payload.ref.split('/').pop(),
-        to: context.payload.ref.split('/').pop()
-      },
+      sender_name: context.payload.sender.login,
+      sender_type: context.payload.sender.type,
+      sender_id: context.payload.sender.id,
+      branch_from: context.payload.ref.split('/').pop(),
+      branch_to: context.payload.ref.split('/').pop(),
       timestamp: new Date()
     }
   }
@@ -65,15 +59,11 @@ export default class ProbotService {
     return {
       name: context.name,
       action: context.payload.action,
-      sender: {
-        name: context.payload.sender.login,
-        type: context.payload.sender.type,
-        id: context.payload.sender.id
-      },
-      branch: {
-        from: context.payload.pull_request.head.ref,
-        to: context.payload.pull_request.base.ref,
-      },
+      sender_name: context.payload.sender.login,
+      sender_type: context.payload.sender.type,
+      sender_id: context.payload.sender.id,
+      branch_from: context.payload.pull_request.head.ref,
+      branch_to: context.payload.pull_request.base.ref,
       timestamp: new Date()
     }
   }
@@ -83,15 +73,11 @@ export default class ProbotService {
     return {
       name: context.name,
       action: "merged", // <- Is a booleab in the context payload, so we need to set the constant ourselves
-      sender: {
-        name: context.payload.sender.login,
-        type: context.payload.sender.type,
-        id: context.payload.sender.id
-      },
-      branch: {
-        from: context.payload.pull_request.head.ref,
-        to: context.payload.pull_request.base.ref,
-      },
+      sender_name: context.payload.sender.login,
+      sender_type: context.payload.sender.type,
+      sender_id: context.payload.sender.id,
+      branch_from: context.payload.pull_request.head.ref,
+      branch_to: context.payload.pull_request.base.ref,
       timestamp: new Date()
     }
   }
@@ -101,11 +87,9 @@ export default class ProbotService {
     return {
       name: context.name,
       action: context.payload.action,
-      sender: {
-        name: context.payload.sender.login,
-        type: context.payload.sender.type,
-        id: context.payload.sender.id
-      },
+      sender_name: context.payload.sender.login,
+      sender_type: context.payload.sender.type,
+      sender_id: context.payload.sender.id,
       timestamp: new Date()
     }
   }

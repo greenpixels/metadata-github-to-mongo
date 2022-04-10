@@ -1,18 +1,10 @@
-interface Sender {
-  readonly name: string,
-  readonly id: number,
-  readonly type: string
-}
-
-interface Branch {
-  readonly from: string,
-  readonly to: string
-}
-
 export default interface Event {
   readonly name: string,
   readonly action: string,
-  readonly sender: Sender,
-  readonly branch?: Branch,
+  readonly branch_to?: string,
+  readonly branch_from?: string,
+  readonly sender_name: string,
+  readonly sender_id: number,
+  readonly sender_type: string,
   readonly timestamp: Date
 }
