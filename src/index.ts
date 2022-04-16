@@ -8,6 +8,9 @@ const mongoservice = new MongoService();
 
 module.exports = async (app: Probot, _router: any, collection_name: string = "events") => { // Probot overwrites the second parameter with a router-object, so we can only use the third parameter
   await mongoservice.connect();
+  setInterval(() => {
+    mongoservice.convertToCSV("events", ["action", "name", "branch_from", "branch_to", "sender_id", "sender_name", "sender_type", "timestamp"]);
+  }, 10000)
   app.on("push", async (context: any) => {
     //console.log(context.payload)
     if (probotservice.disassemblePushContext(context) === "create") {
@@ -50,3 +53,4 @@ module.exports = async (app: Probot, _router: any, collection_name: string = "ev
     await mongoservice.addOne<Event>(collection_name, ev);
   });
 };
+
